@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&display=swap');
+
+        :root{--mainsize:1400px;--e-font:"Anton", sans-serif;--p-font:"Instrument Serif", serif}
+
+        body,html {height:100%;margin:0;padding:0}
+        ul, li, dl, dt, dd, p, span, h3, h2{margin:0;padding:0}
+        a{text-decoration:none}
+        ul, li{list-style:none}
+        *, :after, :before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+
+        #vision1012{overflow:hidden;text-align:center;background:#111}
+        #vision1012 .full_img{position:relative;overflow:hidden;height:100vh}
+        #vision1012 .full_img .bg:after{position:absolute;content:'';top:0;left:0;width:100%;height:100vh;background:rgba(0,0,0,.5)}
+        #vision1012 .full_img .bg{position:absolute;top:50%;left:50%;width:100%;height:100%;background-image:url('https://bea1025.shiningcorp.com/sh_img/index/main_banner/main_img1.jpg');background-size:cover;background-position:center;clip-path:inset(30% 30% 30% 30%);z-index:0;transition:all .3s;transform:translate(-50%, -50%)}
+        #vision1012 .full_img p{font-size:90px;line-height:1;font-family:var(--e-font)}
+        #vision1012 .full_img p span{font-size:100px;font-family:var(--p-font)}
+        #vision1012 .b_txt{position:absolute;z-index:10;top:50%;left:50%;color:#fff;transform:translate(-50%, -50%)}
+        #vision1012 .b_txt .top_txt{transform:translateX(-300px)}
+        #vision1012 .b_txt .btm_txt{transform:translateX(300px)}
+
+        /* 반응형 [s] */
+        @media (max-width:1024px){
+            #vision1012 .b_txt{width:100%}
+            #vision1012 .b_txt .top_txt{transform:translateX(-200px)}
+            #vision1012 .b_txt .btm_txt{transform:translateX(200px)}
+            #vision1012 .full_img p{font-size:50px}
+            #vision1012 .full_img p span{font-size:65px}
+        }
+        @media (max-width:768px){
+            #vision1012 .full_img p{font-size:40px}
+            #vision1012 .full_img p span{font-size:50px}
+            #vision1012 .b_txt .top_txt{transform:translateX(-100px)}
+            #vision1012 .b_txt .btm_txt{transform:translateX(100px)}
+        }
+        @media (max-width:480px){
+            #vision1012{font-size:14px}
+            #vision1012 .full_img p{font-size:30px}
+            #vision1012 .full_img p span{font-size:40px}
+            #vision1012 .b_txt .top_txt{transform:translateX(-50px)}
+            #vision1012 .b_txt .btm_txt{transform:translateX(50px)}
+        }
+        /* 반응형 [e] */
+    </style>
+
+    <div id="vision1012">
+        <div class="full_img">
+            <div class="bg"></div>
+            <div class="b_txt">
+                <p class="top_txt">Customer <span>First</span></p>
+                <p class="btm_txt"><span>Sustainable</span> Growth</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.to("#vision1012 .full_img", {
+            scrollTrigger: {
+                trigger: "#vision1012",
+                pin: true,
+                scrub: 0.5,
+                start: "top top",
+                end: "+=1000"
+            }
+        });
+
+        gsap.to("#vision1012 .bg", {
+            clipPath: "inset(0% 0% 0% 0%)",
+            scrollTrigger: {
+                trigger: "#vision1012 .full_img",
+                start: "top top",
+                end: "+=1000",
+                scrub: 0.5
+            }
+        });
+
+        gsap.to("#vision1012 .top_txt", {
+            x: 0,
+            scrollTrigger: {
+                trigger: "#vision1012 .full_img",
+                start: "top top",
+                end: "+=1000",
+                scrub: 1
+            }
+        });
+
+        gsap.to("#vision1012 .btm_txt", {
+            x: 0,
+            scrollTrigger: {
+                trigger: "#vision1012 .full_img",
+                start: "top top",
+                end: "+=1000",
+                scrub: 1
+            }
+        });
+    </script>
+</body>
+</html>

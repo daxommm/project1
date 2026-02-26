@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
+<title>Section 3</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Pretendard', sans-serif;
+}
+
+/* ===== Section 3 ===== */
+
+.section-3{
+  position:relative;
+  min-height:300vh;
+  background:#000;
+  color:#fff;
+}
+
+/* sticky 영역 */
+.section-3 .inner{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:0 10vw;
+}
+
+/* 기본 텍스트 */
+.section-3 p{
+  font-size:2vw;
+  margin:20px 0;
+}
+
+/* 첫 문장 */
+.section-3 .first{
+  font-size:4vw;
+  font-weight:700;
+  filter:blur(50px);
+  opacity:0.3;
+}
+
+/* 일반 문단 초기 숨김 */
+.section-3 p:not(.first):not(.last){
+  opacity:0;
+  transform:translateY(40px);
+}
+
+/* 마지막 문장 */
+.section-3 .last{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  font-size:3vw;
+  font-weight:700;
+}
+
+.section-3 .last span{
+  white-space:nowrap;
+  overflow:hidden;
+  display:inline-block;
+}
+
+.section-3 .word01,
+.section-3 .word02{
+  width:0;
+  opacity:0;
+}
+</style>
+</head>
+<body>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"></script>
+
+<script>
+
+
+</script>
+</body>
+</html>

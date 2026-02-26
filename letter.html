@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./asset/css/reset.css">
+</head>
+<body>
+
+    <style>
+.section-letter{
+  position:relative;
+  height:500vh;
+  background:#000;
+  color:#fff;
+}
+
+.section-letter .inner{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.line{
+  position:absolute;
+  width:100%;
+  font-size:2.2vw;
+  opacity:0;
+}
+
+.first{
+  filter:blur(50px);
+  opacity:1;
+}
+    </style>
+    
+    <section class="section-letter">
+        <div class="inner">
+            <p class="line first">많이 놀랐지?</p>
+            <p class="line">오랫동안 이 순간을 기다려왔어</p>
+            <p class="line">우리가 처음 만난 날부터</p>
+            <p class="line">6년이라는 시간이 흐르는 동안</p>
+            <p class="line">한결같이 내 옆을 지켜주는 너를 보며</p>
+            <p class="line">이 사람을 믿고 결혼할 수 있겠다 결심했어</p>
+            <p class="line">우리가 함께 쌓아온 믿음으로</p>
+            <p class="line">이제 너와 평생을 함께하고 싶어</p>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/ScrollToPlugin.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        /**
+         * 4. Section 3 애니메이션
+         */
+
+        function initLetter(){
+
+        const lines = gsap.utils.toArray(".section-letter .line:not(.last-group)");
+
+        const tl = gsap.timeline({
+            scrollTrigger:{
+            trigger: ".section-letter",
+            start: "top top",
+            end: "+=6000",
+            scrub: true,
+            pin: true,
+            anticipatePin:1
+            }
+        });
+
+        /* 1️⃣ 첫 줄 - 초점 맞춰지듯 */
+        tl.to(".first", {
+            filter:"blur(0px)",
+            duration:1.5,
+            ease:"power2.out"
+        });
+
+        tl.to(".first", {
+            opacity:0,
+            duration:1
+        });
+
+        /* 2️⃣ 중간 줄들 */
+        lines.slice(1).forEach(line => {
+
+            tl.to(line,{
+            opacity:1,
+            y:0,
+            duration:1.2,
+            ease:"power3.out"
+            });
+
+            tl.to(line,{
+            opacity:0,
+            y:-60,
+            duration:1
+            });
+
+        });
+
+        }
+   
+        window.onload = () => {
+            initLetter();
+            ScrollTrigger.refresh();
+        };
+    </script>
+</body>
+</html>

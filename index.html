@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="./asset/css/reset.css">
+    <link rel="stylesheet" href="./asset/css/style.css">
+</head>
+<body>
+    <div class="wrap">
+        <section class="section-1" data-bgcolor="#000">
+            <p class="intro-text">우리가 함께한 시간</p>
+
+            <div class="day-wrapper">
+                <span id="day-counter">0</span>
+                <span class="day-text">DAYS</span>
+            </div>
+
+            <div class="sub-info">
+                <span id="live-time">00:00:00.00</span>
+            </div>
+
+            <div class="scroll-guide" id="scroll-guide">SCROLL</div>
+        </section>
+
+        <section class="section-3" data-bgcolor="#000">
+            <div class="inner">
+                <p class="line first">많이 놀랐지?</p>
+                <p class="line">오랫동안 이 순간을 기다려왔어</p>
+                <p class="line">우리가 처음 만난 날부터</p>
+                <p class="line">6년이라는 시간이 흐르는 동안</p>
+                <p class="line">한결같이 내 옆을 지켜주는 너를 보며</p>
+                <p class="line">이 사람을 믿고 결혼할 수 있겠다 결심했어</p>
+                <p class="line">우리가 함께 쌓아온 믿음으로</p>
+                <p class="line">이제 너와 평생을 함께하고 싶어</p>
+            </div>
+        </section>
+        <section class="section-4" data-bgcolor="#000">
+                <div class="display-area">
+                    <strong id="main-msg" class="main-massage">Will you marry me?</strong>
+                    <div id="photo" class="image-container">
+                        <img src="./asset/images/KakaoTalk_20260226_220809178.jpg" alt="Special Moment">
+                    </div>
+                </div>
+
+                <div class="button-group" id="btn-wrap">
+                    <button id="btn-yes" class="ready" onclick="clickYes()">
+                        <div class="message submitMessage"><span>Yes</span></div>
+                        <div class="message loadingMessage">
+                        <svg viewbox="0 0 19 17">
+                            <circle cx="2.2" cy="10" r="1.6" style="animation: loading 1s infinite"/>
+                            <circle cx="9.5" cy="10" r="1.6" style="animation: loading 1s infinite; animation-delay: .1s"/>
+                            <circle cx="16.8" cy="10" r="1.6" style="animation: loading 1s infinite; animation-delay: .2s"/>
+                        </svg>
+                        </div>
+                        <div class="message successMessage"><span>💍</span></div>
+                    </button>
+
+                    <button id="btn-no" 
+                            onmouseover="dodgeNo(event)" 
+                            onmousedown="dodgeNo(event)" 
+                            ontouchstart="dodgeNo(event)" 
+                            onclick="clickNo()">
+                        <span class="no-text">No</span>
+                    </button>
+                </div>
+                    
+                <canvas id="canvas"></canvas>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.1/ScrollToPlugin.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        /**
+         * 1. 배경색 스크롤 제어
+         */
+        function initScrollBackground() {
+            gsap.utils.toArray("section").forEach((item) => {
+
+                // 🔥 section-3는 제외
+                if(item.classList.contains("section-3")) return;
+
+                const color = item.getAttribute("data-bgcolor");
+                if (!color) return;
+                
+
+                ScrollTrigger.create({
+                    trigger: item,
+                    start: "top 60%",
+                    end: "bottom 40%",
+                    onEnter: () => gsap.to("body", { backgroundColor: color, duration: 0.8 }),
+                    onEnterBack: () => gsap.to("body", { backgroundColor: color, duration: 0.8 }),
+                });
+            });
+        }
+
+        /**
+         * 2. 섹션 1 카운팅 애니메이션
+         */
+        function initIntroAnimation() {
+            const baseDate = new Date("2019-12-22");
+            const now = new Date();
+
+            const targetDay = Math.floor(
+                (new Date(now.getFullYear(), now.getMonth(), now.getDate()) -
+                new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate()))
+                / (1000 * 60 * 60 * 24)
+            ) + 1;
+
+            const dayEl = document.querySelector("#day-counter");
+            const scrollGuide = document.querySelector("#scroll-guide");
+            if (!dayEl) return;
+
+            const dayCounter = { value: 0 };
+            const splitPoint = Math.min(2000, targetDay);
+
+            const tl = gsap.timeline();
+
+            tl.to(dayCounter, {
+                value: splitPoint,
+                duration: 1.2,
+                ease: "power2.out",
+                onUpdate: () => { dayEl.textContent = Math.floor(dayCounter.value); }
+            })
+            .to(dayCounter, {
+                value: targetDay,
+                duration: 1.6,
+                ease: "power4.out",
+                onUpdate: () => { dayEl.textContent = Math.floor(dayCounter.value); }
+            })
+            .to(dayEl, { scale: 1.08, duration: 0.2, yoyo: true, repeat: 1 })
+            .call(() => {
+                if(scrollGuide){
+                    gsap.to(scrollGuide, { opacity: 9, duration: 1 });
+                }
+            });
+        }
+
+        /**
+         * 3. 실시간 시계
+         */
+        function initClock() {
+            const timeEl = document.querySelector("#live-time");
+            if (!timeEl) return;
+
+            function update() {
+                const now = new Date();
+                const h = String(now.getHours()).padStart(2, "0");
+                const m = String(now.getMinutes()).padStart(2, "0");
+                const s = String(now.getSeconds()).padStart(2, "0");
+                const ms = String(Math.floor(now.getMilliseconds()/10)).padStart(2, "0");
+
+                timeEl.textContent = `${h}:${m}:${s}.${ms}`;
+                requestAnimationFrame(update);
+            }
+            update();
+        }
+
+        /* secion 2 */
+
+        /**
+         * 4. Section 3 애니메이션
+         */
+
+        function initLetter(){
+
+            gsap.set(".section-3 .line:not(.first)", { y:60 });
+
+            const lines = gsap.utils.toArray(".section-3 .line");
+
+            const tl = gsap.timeline({
+                scrollTrigger:{
+                    trigger: ".section-3",
+                    start: "top top",
+                    end: "+=2800",
+                    scrub: 1,
+                    pin: true,
+                    anticipatePin:1
+                }
+            });
+
+            // 첫 줄
+            tl.to(lines[0], {
+                filter:"blur(0px)",
+                duration:1.5,
+                ease:"power2.out"
+            });
+
+            tl.to(lines[0], {
+                opacity:0,
+                duration:1
+            });
+
+            // 나머지 줄들
+            lines.slice(1).forEach(line => {
+
+                tl.to(line,{
+                    opacity:1,
+                    y:0,
+                    duration:1.2,
+                    ease:"power3.out"
+                });
+
+                tl.to(line,{
+                    opacity:0,
+                    y:-60,
+                    duration:1
+                });
+
+            });
+
+        }
+   
+        window.onload = () => {
+            initScrollBackground();
+            initIntroAnimation();
+            initClock();
+            initLetter();
+            ScrollTrigger.refresh();
+        };
+
+        /* secion 4 */
+          const btnYes = document.getElementById('btn-yes');
+            const btnNo = document.getElementById('btn-no');
+            const mainMsg = document.getElementById('main-msg');
+            const photo = document.getElementById('photo');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            let noClickCount = 0;
+            let disabled = false;
+
+            function dodgeNo(e) {
+                if (noClickCount < 2) {
+                // 모바일에서 터치 시 이벤트 전파 방지 (클릭 발생 억제)
+                if (e.type === 'touchstart') {
+                    // e.preventDefault(); // 필요 시 활성화
+                }
+
+                const padding = 50; // 화면 가장자리 여유 공간
+                // 이동 가능한 최대 범위 계산
+                const maxX = (window.innerWidth / 2) - padding;
+                const maxY = (window.innerHeight / 2) - padding;
+                
+                const randomX = (Math.random() - 0.5) * window.innerWidth * 0.8;
+                const randomY = (Math.random() - 0.5) * window.innerHeight * 0.6;
+                
+                btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                }
+            }
+
+            function clickNo() {
+                noClickCount++;
+                if (noClickCount >= 2) {
+                btnNo.classList.add('vanish');
+                btnYes.classList.add('full-width');
+                setTimeout(() => {
+                    btnNo.style.display = 'none';
+                }, 500);
+                } else {
+                dodgeNo();
+                }
+            }
+
+            function clickYes() {
+                if (disabled) return;
+                disabled = true;
+                
+                btnNo.classList.add('vanish');
+                btnYes.classList.add('full-width');
+                btnYes.className = 'loading full-width';
+
+                setTimeout(() => {
+                btnYes.className = 'complete full-width';
+                mainMsg.classList.add('hide');
+                setTimeout(() => {
+                    burst();
+                    photo.classList.add('show');
+                }, 320);
+                }, 1500);
+            }
+
+            // --- 컨페티 로직 ---
+            const COLORS = [{ front:'#ff5c8a', back:'#e04572' }, { front:'#b3c7ff', back:'#8fa5e5' }, { front:'#ffcc00', back:'#d1a700' }];
+            const rand = (a, b) => Math.random() * (b - a) + a;
+            let confetti = [];
+
+            function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Confetto {
+                constructor() {
+                this.mod = rand(0, 99);
+                this.color = COLORS[Math.floor(rand(0, 3))];
+                this.dim = { x: rand(5,9), y: rand(8,15) };
+                this.pos = { x: rand(innerWidth/2 - 100, innerWidth/2 + 100), y: rand(innerHeight/2, innerHeight/2 + 100) };
+                this.rot = rand(0, 2*Math.PI);
+                this.scale = { x:1, y:1 };
+                this.vel = { x: rand(-10, 10), y: -rand(7, 12) };
+                }
+                update() {
+                this.vel.x -= this.vel.x * 0.075; this.vel.y = Math.min(this.vel.y + 0.3, 3);
+                this.pos.x += this.vel.x; this.pos.y += this.vel.y;
+                this.scale.y = Math.cos((this.pos.y + this.mod) * 0.09);
+                }
+            }
+
+            function burst() { for (let i=0; i<50; i++) confetti.push(new Confetto()); }
+
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                confetti.forEach(c => {
+                const w = c.dim.x * c.scale.x, h = c.dim.y * c.scale.y;
+                ctx.translate(c.pos.x, c.pos.y); ctx.rotate(c.rot); c.update();
+                ctx.fillStyle = c.scale.y > 0 ? c.color.front : c.color.back;
+                ctx.fillRect(-w/2, -h/2, w, h); ctx.setTransform(1,0,0,1,0,0);
+                });
+                requestAnimationFrame(render);
+            }
+            render();
+    </script>
+</body>
+</html>
