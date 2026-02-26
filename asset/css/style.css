@@ -5,6 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700&display=swap');
 
 /* common */
+body {background: #000;}
 html, body {
   overflow-y: scroll;       /* 스크롤 기능은 항상 활성화 */
   overflow-x: hidden;       /* 가로 스크롤만 방지 */
