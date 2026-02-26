@@ -165,36 +165,6 @@
             update();
         }
 
-        /* secion 2 */
-        function initSection2Animation(){
-
-            const section2 = document.querySelector(".section-2");
-            const netflixIntro = document.querySelector("netflixintro");
-
-            if(!section2 || !netflixIntro) return;
-
-            const tl = gsap.timeline({
-                scrollTrigger:{
-                    trigger: section2,
-                    start: "top top",
-                    end: "+=2000",
-                    pin: true,
-                    scrub: false,
-                    once: true,
-                    onEnter: () => {
-                        netflixIntro.classList.add("play");
-                    },
-                    onLeave: () => {
-                        gsap.to(window, {
-                            duration: 1.2,
-                            scrollTo: ".section-3",
-                            ease: "power2.inOut"
-                        });
-                    }
-                }
-            });
-
-        }
         /**
          * 4. Section 3 애니메이션
          */
@@ -253,7 +223,6 @@
             initIntroAnimation();
             initClock();
             initLetter();
-            initSection2Animation(); 
             ScrollTrigger.refresh();
         };
 
