@@ -29,7 +29,7 @@
 
         <section class="section-3">
             <div class="inner">
-                <p class="line first">놀랐지?</p>
+                <p class="line">놀랐지?</p>
                 <p class="line">오랫동안 이 순간을 기다려왔어</p>
                 <p class="line">우리가 처음 만난 날부터</p>
                 <p class="line">6년이라는 시간이 흐르는 동안</p>
@@ -127,13 +127,13 @@
 
             tl.to(dayCounter, {
                 value: splitPoint,
-                duration: 1.2,
+                duration: 1,
                 ease: "power2.out",
                 onUpdate: () => { dayEl.textContent = Math.floor(dayCounter.value); }
             })
             .to(dayCounter, {
                 value: targetDay,
-                duration: 1.6,
+                duration: 1.2,
                 ease: "power4.out",
                 onUpdate: () => { dayEl.textContent = Math.floor(dayCounter.value); }
             })
@@ -170,54 +170,41 @@
          */
 
         function initLetter(){
-
-            gsap.set(".section-3 .line:not(.first)", { y:60 });
+            // 1. 모든 줄의 초기 위치를 아래로 60px 이동 (클래스 구분 없음)
+            gsap.set(".section-3 .line", { y: 60, opacity: 0 });
 
             const lines = gsap.utils.toArray(".section-3 .line");
 
             const tl = gsap.timeline({
-                scrollTrigger:{
+                scrollTrigger: {
                     trigger: ".section-3",
                     start: "top top",
                     end: "+=2800",
                     scrub: 1,
                     pin: true,
-                    anticipatePin:1
+                    anticipatePin: 1
                 }
             });
 
-            // 첫 줄
-            tl.to(lines[0], {
-                filter:"blur(0px)",
-                duration:1.5,
-                ease:"power2.out"
-            });
-
-            tl.to(lines[0], {
-                opacity:0,
-                duration:1.2
-            });
-
-            // 나머지 줄들
-            lines.slice(1).forEach(line => {
-
-                tl.to(line,{
-                    opacity:1,
-                    y:0,
-                    duration:1.2,
-                    ease:"power3.out"
+            // 2. 모든 줄에 대해 순차적으로 애니메이션 적용
+            lines.forEach(line => {
+                // 등장: 아래에서 위로 올라오며 선명해짐
+                tl.to(line, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: "power3.out"
                 });
 
-                tl.to(line,{
-                    opacity:0,
-                    y:-60,
-                    duration:1
+                // 퇴장: 위로 더 올라가며 사라짐
+                tl.to(line, {
+                    opacity: 0,
+                    y: -60,
+                    duration: 1
                 });
-
             });
-
         }
-   
+
         window.onload = () => {
             initScrollBackground();
             initIntroAnimation();
