@@ -21,7 +21,10 @@
             </div>
 
             <div class="sub-info">
-                <span id="live-time">00:00:00.00</span>
+                <span id="t-hours">0</span> HRS
+                <span id="t-mins">00</span> MIN
+                <span id="t-secs">00</span> SEC
+                <span id="t-ms">00</span>
             </div>
 
             <div class="scroll-guide" id="scroll-guide">SCROLL</div>
@@ -149,19 +152,30 @@
          * 3. 실시간 시계
          */
         function initClock() {
-            const timeEl = document.querySelector("#live-time");
-            if (!timeEl) return;
+            const hoursEl = document.querySelector("#t-hours");
+            const minsEl  = document.querySelector("#t-mins");
+            const secsEl  = document.querySelector("#t-secs");
+            const msEl    = document.querySelector("#t-ms");
+            if (!hoursEl) return;
+
+            const baseDate = new Date("2019-12-22T00:00:00");
 
             function update() {
                 const now = new Date();
-                const h = String(now.getHours()).padStart(2, "0");
-                const m = String(now.getMinutes()).padStart(2, "0");
-                const s = String(now.getSeconds()).padStart(2, "0");
-                const ms = String(Math.floor(now.getMilliseconds()/10)).padStart(2, "0");
+                const diff = now - baseDate;
 
-                timeEl.textContent = `${h}:${m}:${s}.${ms}`;
+                const totalSeconds = Math.floor(diff / 1000);
+                const totalMinutes = Math.floor(totalSeconds / 60);
+                const totalHours   = Math.floor(totalMinutes / 60);
+
+                hoursEl.textContent = totalHours.toLocaleString();
+                minsEl.textContent  = String(totalMinutes % 60).padStart(2, "0");
+                secsEl.textContent  = String(totalSeconds % 60).padStart(2, "0");
+                msEl.textContent    = String(Math.floor((diff % 1000) / 10)).padStart(2, "0");
+
                 requestAnimationFrame(update);
             }
+
             update();
         }
 
